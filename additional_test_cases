@@ -1,0 +1,112 @@
+# tests/validation/main.tf
+provider "google" {
+  project = "test-project"
+  region  = "us-central1"
+}
+
+# Test Case 1: Basic Configuration
+module "datastore_basic" {
+  source = "../../"
+
+  project_id = "test-project"
+  region     = "us-central1"
+  name       = "test-basic"
+  kind_name  = "BasicKind"
+
+  index_properties = [
+    {
+      name = "basic_index"
+      properties = [
+        {
+          name      = "timestamp"
+          direction = "DESCENDING"
+        }
+      ]
+    }
+  ]
+}
+
+# Test Case 2: Complex Indexes
+module "datastore_complex" {
+  source = "../../"
+
+  project_id = "test-project"
+  region     = "us-central1"
+  name       = "test-complex"
+  kind_name  = "ComplexKind"
+
+  index_properties = [
+    {
+      name = "composite_index"
+      properties = [
+        {
+          name      = "created_at"
+          direction = "DESCENDING"
+        },
+        {
+          name      = "user_id"
+          direction = "ASCENDING"
+        },
+        {
+          name      = "status"
+          direction = "ASCENDING"
+        }
+      ]
+    }
+  ]
+  enable_composite_index = true
+}
+
+# Test Case 3: Backup Enabled
+module "datastore_backup" {
+  source = "../../"
+
+  project_id = "test-project"
+  region     = "us-central1"
+  name       = "test-backup"
+  kind_name  = "BackupKind"
+
+  index_properties = [
+    {
+      name = "backup_index"
+      properties = [
+        {
+          name      = "last_backup"
+          direction = "DESCENDING"
+        }
+      ]
+    }
+  ]
+  enable_backup = true
+}
+
+# Test Case 4: Multiple Indexes
+module "datastore_multi_index" {
+  source = "../../"
+
+  project_id = "test-project"
+  region     = "us-central1"
+  name       = "test-multi"
+  kind_name  = "MultiKind"
+
+  index_properties = [
+    {
+      name = "index_1"
+      properties = [
+        {
+          name      = "field1"
+          direction = "ASCENDING"
+        }
+      ]
+    },
+    {
+      name = "index_2"
+      properties = [
+        {
+          name      = "field2"
+          direction = "DESCENDING"
+        }
+      ]
+    }
+  ]
+}
